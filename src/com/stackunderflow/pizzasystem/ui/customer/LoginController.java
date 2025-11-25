@@ -47,7 +47,7 @@ public class LoginController {
 
 
     @FXML
-    protected void visitSignupPage(ActionEvent event){
+    protected void onvisitSignupPage(ActionEvent event){
         try{
             FXMLLoader loader = new FXMLLoader((getClass().getResource("signUP-view.fxml")));
             Parent signUproot = loader.load();
@@ -147,10 +147,11 @@ public class LoginController {
             visitCreatAccountPage.setVisible(true);
         }
         if(checkPassword(enterPassword.getText())){
+            count--;
             errorMessagePassword.setVisible(true);
             errorMessagePasswordCount.setVisible(true);
             errorMessagePasswordCount.setText("Remaining attempts: "+ count);
-            count--;
+            
 
             if (count == 0){
                 errorTooManyAttempts.setVisible(true);

@@ -5,9 +5,15 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -54,6 +60,16 @@ public class SignupController implements Initializable{
     //Buttons
     @FXML
     private Button submitAccountCreation;
+    @FXML
+    private Button visitPrevousPage;
+    @FXML
+    private Button visitloginPage;
+    @FXML
+    private Button visitHomepage;
+    @FXML
+    private Button visitMenuPage;
+    @FXML
+    private Button visitOrderPage;
 
 
 
@@ -150,6 +166,43 @@ public class SignupController implements Initializable{
         }
         if(selectedState.equals("Select a State")){
             errorMessageState.setVisible(true);
+        }
+
+
+    }
+
+    @FXML
+    protected void onvisitloginPagePress(ActionEvent event){
+        try{
+            FXMLLoader loader = new FXMLLoader((getClass().getResource("Login-view.fxml")));
+            Parent loginroot = loader.load();
+
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            Scene loginScene = new Scene(loginroot);
+            stage.setScene(loginScene);
+            stage.setTitle("Mom & Pop's Pizzaria");
+            stage.show();
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+
+
+    }
+    @FXML
+    protected void onvisitHomepage(ActionEvent event){
+        try{
+            FXMLLoader loader = new FXMLLoader((getClass().getResource("homepage-view.fxml")));
+            Parent homepageroot = loader.load();
+
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            Scene homepageScene = new Scene(homepageroot);
+            stage.setScene(homepageScene);
+            stage.setTitle("Mom & Pop's Pizzaria");
+            stage.show();
+        } catch (IOException e){
+            e.printStackTrace();
         }
 
 
