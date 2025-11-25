@@ -47,7 +47,7 @@ public class LoginController {
 
 
     @FXML
-    protected void visitSignupPage(ActionEvent event){
+    protected void onvisitSignupPage(ActionEvent event){
         try{
             FXMLLoader loader = new FXMLLoader((getClass().getResource("signUP-view.fxml")));
             Parent signUproot = loader.load();

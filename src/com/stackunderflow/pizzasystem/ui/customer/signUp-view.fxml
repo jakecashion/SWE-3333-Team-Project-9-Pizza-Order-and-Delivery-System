@@ -18,14 +18,14 @@
          </image>
       </ImageView>
       <Button fx:id="submitAccountCreation" layoutX="534.0" layoutY="469.0" mnemonicParsing="false" onAction="#onsumbitAccountCreation" prefHeight="40.0" prefWidth="153.0" style="-fx-background-color: clear;" />
-      <Button fx:id="visitHomepage" layoutX="44.0" layoutY="31.0" mnemonicParsing="false" onAction="#visitHomepage" prefHeight="52.0" prefWidth="52.0" style="-fx-background-color: clear;">
+      <Button fx:id="visitHomepage" layoutX="44.0" layoutY="31.0" mnemonicParsing="false" onAction="#onvisitHomepage" prefHeight="52.0" prefWidth="52.0" style="-fx-background-color: clear;">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor></Button>
       <Button fx:id="visitMenuPage" layoutX="131.0" layoutY="44.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="69.0" style="-fx-background-color: clear;" />
       <Button fx:id="visitOrderPage" layoutX="235.0" layoutY="44.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="69.0" style="-fx-background-color: clear;" />
       <Button layoutX="970.0" layoutY="51.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="98.0" style="-fx-background-color: clear;" />
-      <Button fx:id="visitloginPage" layoutX="1076.0" layoutY="36.0" mnemonicParsing="false" onAction="#visitloginPage" prefHeight="52.0" prefWidth="52.0" style="-fx-background-color: clear;">
+      <Button fx:id="visitloginPage" layoutX="1076.0" layoutY="36.0" mnemonicParsing="false" onAction="#onvisitloginPagePress" prefHeight="52.0" prefWidth="52.0" style="-fx-background-color: clear;">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor></Button>
@@ -46,7 +46,7 @@
       <Label fx:id="errorPasswordCreationp4" layoutX="374.0" layoutY="524.0" text="-Contain at least 1 number" textAlignment="CENTER" textFill="RED" visible="false" />
       <Label fx:id="errorPasswordCreationp5" layoutX="373.0" layoutY="548.0" text="-Contain at least special character" textAlignment="CENTER" textFill="RED" visible="false" />
       <PasswordField fx:id="enterPassword" layoutX="58.0" layoutY="277.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="197.0" promptText="Enter Password" style="-fx-background-color: clear;" />
-      <Button fx:id="visitPrevousPage" layoutX="971.0" layoutY="51.0" mnemonicParsing="false" onAction="#visitloginPage" prefHeight="25.0" prefWidth="96.0" style="-fx-background-color: clear;">
+      <Button fx:id="visitPrevousPage" layoutX="971.0" layoutY="51.0" mnemonicParsing="false" onAction="#onvisitloginPagePress" prefHeight="25.0" prefWidth="96.0" style="-fx-background-color: clear;">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>

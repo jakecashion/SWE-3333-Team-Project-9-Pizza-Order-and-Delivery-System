@@ -190,7 +190,7 @@ public class SignupController implements Initializable{
 
     }
     @FXML
-    protected void visitHomepage(ActionEvent event){
+    protected void onvisitHomepage(ActionEvent event){
         try{
             FXMLLoader loader = new FXMLLoader((getClass().getResource("homepage-view.fxml")));
             Parent homepageroot = loader.load();
