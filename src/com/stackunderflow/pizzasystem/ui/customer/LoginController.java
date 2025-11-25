@@ -147,10 +147,11 @@ public class LoginController {
             visitCreatAccountPage.setVisible(true);
         }
         if(checkPassword(enterPassword.getText())){
+            count--;
             errorMessagePassword.setVisible(true);
             errorMessagePasswordCount.setVisible(true);
             errorMessagePasswordCount.setText("Remaining attempts: "+ count);
-            count--;
+            
 
             if (count == 0){
                 errorTooManyAttempts.setVisible(true);

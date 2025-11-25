@@ -32,6 +32,10 @@ public class homepageController {
     private Button visitSpecialsPage;
     @FXML
     private Button vistitOrderPage;
+    @FXML
+    private Button vistCartpage;
+    @FXML
+    private Button vistHomepage;
 
 
     @FXML

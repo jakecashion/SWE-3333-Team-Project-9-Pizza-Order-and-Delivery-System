@@ -23,8 +23,8 @@
       </Button>
       <Button fx:id="visitMenuPage" layoutX="86.0" layoutY="26.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="45.0" style="-fx-background-color: clear;" />
       <Button fx:id="visitOrderPage" layoutX="155.0" layoutY="26.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="45.0" style="-fx-background-color: clear;" />
-      <Button fx:id="visitPrevousPage" layoutX="661.0" layoutY="2.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="72.0" style="-fx-background-color: clear;" />
-      <Button fx:id="visitAccountPage" layoutX="707.0" layoutY="18.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="52.0" style="-fx-background-color: clear;" />
+      <Button fx:id="visitPrevousPage" layoutX="615.0" layoutY="26.0" mnemonicParsing="false" onAction="#visitHomepage" prefHeight="25.0" prefWidth="72.0" style="-fx-background-color: clear;" />
+      <Button fx:id="visitAccountPage" layoutX="707.0" layoutY="18.0" mnemonicParsing="false" onAction="#visitSignupPage" prefHeight="40.0" prefWidth="52.0" style="-fx-background-color: clear;" />
       <PasswordField fx:id="enterPassword" blendMode="DARKEN" layoutX="327.0" layoutY="231.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="18.0" prefWidth="135.0" promptText="Enter Password" />
       <TextField fx:id="enterPhonenumber" blendMode="DARKEN" layoutX="327.0" layoutY="178.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="18.0" prefWidth="135.0" promptText="Enter Phonenumber">
          <cursor>
