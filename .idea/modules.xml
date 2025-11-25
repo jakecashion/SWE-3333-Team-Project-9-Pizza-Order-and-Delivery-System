@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project version="4">
-  <component name="ProjectModuleManager">
-    <modules>
-      <module fileurl="file://$PROJECT_DIR$/src/ui/Customer/Customer.iml" filepath="$PROJECT_DIR$/src/ui/Customer/Customer.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/SWE-3333-Team-Project-9-Pizza-Order-and-Delivery-System.iml" filepath="$PROJECT_DIR$/.idea/SWE-3333-Team-Project-9-Pizza-Order-and-Delivery-System.iml" />
-    </modules>
-  </component>
-</project>
