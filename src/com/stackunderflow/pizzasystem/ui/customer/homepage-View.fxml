@@ -13,39 +13,39 @@
             <Image url="@pageImages/homepage.png" />
          </image>
       </ImageView>
-      <Button fx:id="visitMenuPage" onAction="#visitMenuPage" layoutX="132.0" layoutY="157.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="127.0" style="-fx-background-color: clear;">
+      <Button fx:id="visitMenuPage" onAction="#visitMenuPage" layoutX="132.0" layoutY="157.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="127.0" style="-fx-background-color: transparent;">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor></Button>
-      <Button fx:id="vistitOrderPage" onAction="#visitOrderPage" layoutX="367.0" layoutY="156.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="121.0" style="-fx-background-color: clear;">
+      <Button fx:id="vistitOrderPage" onAction="#visitOrderPage" layoutX="367.0" layoutY="156.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="121.0" style="-fx-background-color: transparent;">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor></Button>
-      <Button fx:id="visitCustomPizza" layoutX="573.0" layoutY="157.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="127.0" style="-fx-background-color: clear;">
+      <Button fx:id="visitCustomPizza" layoutX="573.0" layoutY="157.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="127.0" style="-fx-background-color: transparent;">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor></Button>
-      <Button fx:id="vistDrinkPage" layoutX="132.0" layoutY="248.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="127.0" style="-fx-background-color: clear;">
+      <Button fx:id="vistDrinkPage" layoutX="132.0" layoutY="248.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="127.0" style="-fx-background-color: transparent;">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor></Button>
-      <Button fx:id="visitSidePage" layoutX="370.0" layoutY="248.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="121.0" style="-fx-background-color: clear;">
+      <Button fx:id="visitSidePage" layoutX="370.0" layoutY="248.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="121.0" style="-fx-background-color: transparent;">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor></Button>
-      <Button fx:id="visitSpecialsPage" layoutX="573.0" layoutY="248.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="127.0" style="-fx-background-color: clear;">
+      <Button fx:id="visitSpecialsPage" layoutX="573.0" layoutY="248.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="127.0" style="-fx-background-color: transparent;">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor></Button>
-      <Button fx:id="visitAccount" layoutX="724.0" layoutY="21.0" mnemonicParsing="false" onAction="#visitLoginPage" prefHeight="44.0" prefWidth="52.0" style="-fx-background-color: clear;">
+      <Button fx:id="visitAccount" layoutX="724.0" layoutY="21.0" mnemonicParsing="false" onAction="#visitLoginPage" prefHeight="44.0" prefWidth="52.0" style="-fx-background-color: transparent;">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor></Button>
-      <Button fx:id="visitCartpage" layoutX="787.0" layoutY="25.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="52.0" style="-fx-background-color: clear;">
+      <Button fx:id="visitCartpage" layoutX="787.0" layoutY="25.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="52.0" style="-fx-background-color: transparent;">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor></Button>
-      <Button layoutX="14.0" layoutY="20.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="42.0" style="-fx-background-color: clear;">
+      <Button layoutX="14.0" layoutY="20.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="42.0" style="-fx-background-color: transparent;">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
