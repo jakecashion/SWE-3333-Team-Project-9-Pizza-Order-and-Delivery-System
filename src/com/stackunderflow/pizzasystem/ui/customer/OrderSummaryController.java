@@ -1,0 +1,120 @@
+package com.stackunderflow.pizzasystem.ui.customer;
+
+import com.stackunderflow.pizzasystem.model.Cart;
+import com.stackunderflow.pizzasystem.model.Ingredient;
+import com.stackunderflow.pizzasystem.model.MenuItem;
+import com.stackunderflow.pizzasystem.model.Pizza;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import java.io.IOException;
+
+public class OrderSummaryController {
+
+    @FXML private VBox receiptContainer;
+    @FXML private Label subtotalLabel;
+    @FXML private Label taxLabel;
+    @FXML private Label totalLabel;
+
+    @FXML
+    public void initialize() {
+        loadCartItems();
+        calculateTotals();
+    }
+
+    private void loadCartItems() {
+        Cart cart = Cart.getInstance();
+        
+        if (cart.getItems().isEmpty()) {
+            Label empty = new Label("Your cart is empty.");
+            receiptContainer.getChildren().add(empty);
+            return;
+        }
+
+        for (MenuItem item : cart.getItems()) {
+            // 1. Create Main Item Row
+            HBox itemRow = new HBox();
+            Label nameLbl = new Label(item.getName());
+            nameLbl.setStyle("-fx-font-weight: bold;");
+            
+            // Dynamic Price check (Pizza vs Regular)
+            double price = (item instanceof Pizza) ? ((Pizza) item).calculatePrice() : item.getBasePrice();
+            Label priceLbl = new Label("$" + String.format("%.2f", price));
+            
+            // Spacer to push price to the right
+            Region spacer = new Region();
+            HBox.setHgrow(spacer, Priority.ALWAYS);
+            
+            itemRow.getChildren().addAll(nameLbl, spacer, priceLbl);
+            receiptContainer.getChildren().add(itemRow);
+
+            // 2. If Pizza, list the customizations
+            if (item instanceof Pizza) {
+                Pizza pizza = (Pizza) item;
+                VBox detailsBox = new VBox();
+                detailsBox.setStyle("-fx-padding: 0 0 0 10; -fx-text-fill: gray;");
+                
+                Label sizeLbl = new Label("- Size: " + pizza.getSize());
+                Label crustLbl = new Label("- Crust: " + pizza.getCrust());
+                Label sauceLbl = new Label("- Sauce: " + pizza.getSauce());
+                detailsBox.getChildren().addAll(sizeLbl, crustLbl, sauceLbl);
+
+                for (Ingredient topping : pizza.getToppings()) {
+                    Label topLbl = new Label("+ " + topping.getName());
+                    detailsBox.getChildren().add(topLbl);
+                }
+                receiptContainer.getChildren().add(detailsBox);
+            }
+            
+            // Add a small separator space
+            Region rowSpace = new Region();
+            rowSpace.setPrefHeight(10);
+            receiptContainer.getChildren().add(rowSpace);
+        }
+    }
+
+    private void calculateTotals() {
+        Cart cart = Cart.getInstance();
+        double subtotal = cart.calculateSubtotal();
+        double tax = cart.calculateTax();
+        double total = cart.calculateGrandTotal();
+
+        subtotalLabel.setText("$" + String.format("%.2f", subtotal));
+        taxLabel.setText("$" + String.format("%.2f", tax));
+        totalLabel.setText("$" + String.format("%.2f", total));
+    }
+
+    @FXML
+    private void handlePlaceOrder() {
+        // TODO: Task P1.8 - Save to Database
+        
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Order Placed");
+        alert.setHeaderText("Thank you for your order!");
+        alert.setContentText("Your food is being prepared.");
+        alert.showAndWait();
+
+        // Clear Cart and Go Home
+        Cart.getInstance().getItems().clear();
+        handleBack();
+    }
+
+    @FXML
+    private void handleBack() {
+        try {
+            Stage stage = (Stage) receiptContainer.getScene().getWindow();
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("menu-view.fxml"));
+            Scene scene = new Scene(fxmlLoader.load());
+            stage.setScene(scene);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
