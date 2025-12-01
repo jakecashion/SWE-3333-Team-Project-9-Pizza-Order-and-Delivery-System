@@ -13,13 +13,20 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.layout.Priority; // ✅ Added for Spacer
+import javafx.scene.layout.Region;   // ✅ Added for Spacer
+import javafx.scene.effect.DropShadow;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.List;
 
 public class MenuController {
 
-    @FXML private VBox menuContainer;
+    @FXML private HBox pizzaContainer;
+    @FXML private HBox drinkContainer;
+    @FXML private HBox sideContainer;
+    
     @FXML private Label totalLabel;
     @FXML private Label countLabel;
     @FXML private Button checkoutButton;
@@ -37,70 +44,139 @@ public class MenuController {
         List<MenuItem> items = dataManager.loadAllMenuItems();
 
         for (MenuItem item : items) {
-            HBox row = createItemRow(item);
-            menuContainer.getChildren().add(row);
+            VBox card = createItemCard(item);
+            
+            String category = item.getCategory();
+            
+            if ("Pizza".equalsIgnoreCase(category)) {
+                pizzaContainer.getChildren().add(card);
+            } 
+            else if ("Drink".equalsIgnoreCase(category)) {
+                drinkContainer.getChildren().add(card);
+            } 
+            else {
+                sideContainer.getChildren().add(card);
+            }
         }
     }
 
-    private HBox createItemRow(MenuItem item) {
+    private VBox createItemCard(MenuItem item) {
         // 1. Image
         ImageView img = loadImage(item.getName());
+        img.setFitHeight(140);
+        img.setFitWidth(140);
 
-        // 2. Text Info
-        VBox infoBox = new VBox(5);
+        // 2. Name Label (FIXED HEIGHT for alignment)
         Label nameLbl = new Label(item.getName());
-        nameLbl.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
+        nameLbl.setStyle("-fx-font-weight: bold; -fx-font-size: 16px; -fx-text-fill: #333;");
+        nameLbl.setWrapText(true);
+        nameLbl.setAlignment(Pos.CENTER);
+        nameLbl.setPrefHeight(45); // ✅ Forces 2 lines of space so names align
+        nameLbl.setMinHeight(45);
+
+        // 3. Price Label
         Label priceLbl = new Label("$" + String.format("%.2f", item.getBasePrice()));
-        infoBox.getChildren().addAll(nameLbl, priceLbl);
-        infoBox.setAlignment(Pos.CENTER_LEFT);
+        priceLbl.setStyle("-fx-font-size: 14px; -fx-text-fill: #555;");
 
-        // 3. Quantity Spinner
-        Spinner<Integer> qtySpinner = new Spinner<>(1, 10, 1);
-        qtySpinner.setPrefWidth(60);
+        // ✅ 4. SPACER (Pushes button to bottom)
+        Region spacer = new Region();
+        VBox.setVgrow(spacer, Priority.ALWAYS);
 
-        // 4. Add Button
-        Button addButton = new Button("Add");
-        addButton.setOnAction(e -> handleAddItem(item, qtySpinner.getValue()));
-
-        // 5. Layout
-        HBox row = new HBox(20);
-        row.setAlignment(Pos.CENTER_LEFT);
-        row.setPadding(new Insets(10));
-        row.setStyle("-fx-border-color: lightgray; -fx-border-radius: 5; -fx-background-color: white;");
-        row.getChildren().addAll(img, infoBox, new Label("   "), qtySpinner, addButton);
+        // 5. Add Button
+        Button addButton = new Button("ADD");
+        String defaultStyle = "-fx-background-color: white; -fx-border-color: #ff6347; -fx-border-width: 2; -fx-text-fill: #ff6347; -fx-font-weight: bold; -fx-cursor: hand;";
+        String hoverStyle = "-fx-background-color: #ff6347; -fx-text-fill: white; -fx-font-weight: bold;";
         
-        return row;
+        addButton.setStyle(defaultStyle);
+        addButton.setPrefWidth(100);
+        
+        addButton.setOnMouseEntered(e -> addButton.setStyle(hoverStyle));
+        addButton.setOnMouseExited(e -> addButton.setStyle(defaultStyle));
+
+        addButton.setOnAction(e -> handleAddItem(item));
+
+        // 6. Card Container
+        VBox card = new VBox(10);
+        card.setAlignment(Pos.TOP_CENTER);
+        card.setPadding(new Insets(15));
+        card.setPrefSize(200, 300); // Fixed size
+        
+        card.setStyle("-fx-background-color: white; -fx-background-radius: 10; -fx-border-radius: 10;");
+        
+        DropShadow shadow = new DropShadow();
+        shadow.setColor(Color.rgb(0, 0, 0, 0.1));
+        shadow.setRadius(5);
+        shadow.setOffsetY(3);
+        card.setEffect(shadow);
+
+        // Add spacer before the button
+        card.getChildren().addAll(img, nameLbl, priceLbl, spacer, addButton);
+        return card;
     }
 
-    private void handleAddItem(MenuItem item, int quantity) {
-        // A. Handle Pizza (Open Customization P1.7)
+    private void handleAddItem(MenuItem item) {
         if ("Pizza".equalsIgnoreCase(item.getCategory())) {
             openCustomizationScreen(item);
             return; 
         }
-
-        // B. Handle Drinks/Sides (Add Directly)
-        for(int i = 0; i < quantity; i++) {
-            currentCart.addItem(item);
-        }
+        currentCart.addItem(item);
         updateLabels();
         
         Alert confirm = new Alert(Alert.AlertType.INFORMATION);
         confirm.setTitle("Added");
         confirm.setHeaderText(null);
-        confirm.setContentText(quantity + " x " + item.getName() + " added to cart!");
+        confirm.setContentText(item.getName() + " added to cart!");
         confirm.show();
     }
+
+    private void updateLabels() {
+        double total = currentCart.calculateSubtotal();
+        int count = currentCart.getItems().size();
+        totalLabel.setText("Total: $" + String.format("%.2f", total));
+        countLabel.setText("Items: " + count);
+    }
     
-    // Helper for P1.7
-    private void openCustomizationScreen(MenuItem baseItem) {
+    private ImageView loadImage(String name) {
+        try {
+            String filename = name.toLowerCase().replaceAll("\\s+", "") + ".png";
+            String path = "pageImages/" + filename;
+            Image img = new Image(getClass().getResourceAsStream(path));
+            ImageView view = new ImageView(img);
+            view.setPreserveRatio(true);
+            return view;
+        } catch (Exception e) {
+            return new ImageView(); 
+        }
+    }
+    
+    @FXML
+    private void handleCheckout() throws IOException {
+         if (currentCart.getItems().isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Your cart is empty!");
+            alert.show();
+            return;
+        }
+        Stage stage = (Stage) pizzaContainer.getScene().getWindow();
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("order-summary-view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        stage.setTitle("Checkout - Mom & Pop's Pizzeria");
+        stage.setScene(scene);
+    }
+
+    @FXML
+    private void handleBack() throws IOException {
+        Stage stage = (Stage) pizzaContainer.getScene().getWindow();
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("homepage-View.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        stage.setScene(scene);
+    }
+    
+     private void openCustomizationScreen(MenuItem baseItem) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("custom-pizza-view.fxml"));
             Scene scene = new Scene(fxmlLoader.load());
-
             CustomPizzaController controller = fxmlLoader.getController();
             controller.setBasePizza(baseItem);
-
             Stage stage = new Stage();
             stage.setTitle("Customize: " + baseItem.getName());
             stage.setScene(scene);
@@ -108,50 +184,5 @@ public class MenuController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    // Helper for P1.9
-    @FXML
-    private void handleCheckout() throws IOException {
-        if (currentCart.getItems().isEmpty()) {
-            Alert alert = new Alert(Alert.AlertType.WARNING, "Your cart is empty!");
-            alert.show();
-            return;
-        }
-        
-        Stage stage = (Stage) menuContainer.getScene().getWindow();
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("order-summary-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
-        stage.setTitle("Checkout - Mom & Pop's Pizzeria");
-        stage.setScene(scene);
-    }
-
-    private void updateLabels() {
-        double total = currentCart.calculateSubtotal();
-        int count = currentCart.getItems().size();
-        
-        totalLabel.setText("Total: $" + String.format("%.2f", total));
-        countLabel.setText("Items Ordered: " + count);
-    }
-
-    private ImageView loadImage(String name) {
-        try {
-            String filename = name.toLowerCase().replaceAll("\\s+", "") + ".png";
-            String path = "pageImages/" + filename;
-            Image img = new Image(getClass().getResourceAsStream(path));
-            ImageView view = new ImageView(img);
-            view.setFitHeight(60); view.setFitWidth(60); view.setPreserveRatio(true);
-            return view;
-        } catch (Exception e) {
-            return new ImageView(); 
-        }
-    }
-
-    @FXML
-    private void handleBack() throws IOException {
-        Stage stage = (Stage) menuContainer.getScene().getWindow();
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("homepage-View.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
-        stage.setScene(scene);
     }
 }
