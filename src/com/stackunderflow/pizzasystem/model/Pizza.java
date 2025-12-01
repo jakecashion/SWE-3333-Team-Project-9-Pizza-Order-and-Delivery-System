@@ -28,7 +28,11 @@ public class Pizza extends MenuItem {
     public void removeTopping(Ingredient topping) {
         this.toppingsList.remove(topping);
     }
-    
+    public void setBasePrice(double basePrice) { this.basePrice = basePrice; }
+    public void setSize(String size) { this.size = size; }
+    public void setCrust(String crust) { this.crust = crust; }
+    public void setSauce(String sauce) { this.sauce = sauce; }
+    public void clearToppings() { this.toppingsList.clear(); }
     // --- Core Business Logic (Task 5: Dynamic Pricing) ---
     
     /**
