@@ -8,19 +8,43 @@ import java.sql.SQLException;
 public class DatabaseSeeder {
 
     public static void main(String[] args) {
+        clearTables(); // <--- NEW STEP: Wipe the slate clean first
         seedMenuItems();
         seedInventory();
+    }
+
+    private static void clearTables() {
+        String[] deleteSQLs = {
+            "DELETE FROM MenuItems",
+            "DELETE FROM Inventory"
+        };
+
+        try (Connection conn = DatabaseConnector.getConnection()) {
+            for (String sql : deleteSQLs) {
+                try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                    pstmt.executeUpdate();
+                }
+            }
+            System.out.println("🗑️ Tables cleared successfully!");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     private static void seedMenuItems() {
         String sql = "INSERT INTO MenuItems (Item_Name, Description, Base_Price, Category) VALUES (?, ?, ?, ?)";
         
-        // Data from Sprint 2 Requirements
         Object[][] items = {
             {"Cheese Pizza", "Classic cheese", 9.99, "Pizza"},
             {"Pepperoni Pizza", "Pepperoni and cheese", 11.99, "Pizza"},
+            {"Meat Lovers", "Bacon, pepperoni, and sausage", 14.99, "Pizza"},
+            {"Veggie Pizza", "Onions, peppers, and olives", 12.99, "Pizza"},
             {"Coke", "20oz Bottle", 2.50, "Drink"},
-            {"Lava Cake", "Chocolate molten cake", 5.99, "Dessert"}
+            {"Sprite", "20oz Bottle", 2.50, "Drink"},
+            {"Fanta", "20oz Bottle", 2.50, "Drink"},
+            {"Lava Cake", "Chocolate molten cake", 5.99, "Dessert"},
+            {"Cookie", "Chocolate chunk cookie", 4.99, "Dessert"},
+            {"Breadsticks", "6 pieces with marinara", 4.99, "Side"}
         };
 
         try (Connection conn = DatabaseConnector.getConnection();
@@ -33,7 +57,7 @@ public class DatabaseSeeder {
                 pstmt.setString(4, (String) item[3]);
                 pstmt.executeUpdate();
             }
-            System.out.println("MenuItems populated!");
+            System.out.println("✅ MenuItems populated!");
             
         } catch (SQLException e) {
             e.printStackTrace();
@@ -44,10 +68,22 @@ public class DatabaseSeeder {
         String sql = "INSERT INTO Inventory (Ingredient_Name, Unit_Type, Extra_Cost, Current_Stock) VALUES (?, ?, ?, ?)";
         
         Object[][] ingredients = {
-            {"Thin Crust", "Crust", 0.00, 100},
-            {"Pan Crust", "Crust", 1.00, 100},
+            {"Thin", "Crust", 0.00, 100},
+            {"Pan", "Crust", 1.00, 100},
+            {"Regular", "Crust", 0.00, 100},
+            {"Marinara", "Sauce", 0.00, 50},
+            {"Alfredo", "Sauce", 1.00, 50},
+            {"Cheese", "Topping", 0.00, 200},
             {"Pepperoni", "Topping", 1.50, 200},
-            {"Cheese", "Topping", 0.00, 200}
+            {"Sausage", "Topping", 1.50, 200},
+            {"Bacon", "Topping", 1.50, 200},
+            {"Beef", "Topping", 1.50, 200},
+            {"Chicken", "Topping", 1.50, 200},
+            {"Onion", "Topping", 0.50, 200},
+            {"Olives", "Topping", 0.50, 200},
+            {"Mushroom", "Topping", 0.50, 200},
+            {"Pineapple", "Topping", 0.50, 200},
+            {"Jalapeno", "Topping", 0.50, 200}
         };
 
         try (Connection conn = DatabaseConnector.getConnection();
@@ -60,7 +96,7 @@ public class DatabaseSeeder {
                 pstmt.setInt(4, (int) ing[3]);
                 pstmt.executeUpdate();
             }
-            System.out.println("Inventory populated!");
+            System.out.println("✅ Inventory populated!");
 
         } catch (SQLException e) {
             e.printStackTrace();

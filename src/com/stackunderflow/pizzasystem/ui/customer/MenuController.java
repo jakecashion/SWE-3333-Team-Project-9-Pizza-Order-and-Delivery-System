@@ -3,6 +3,7 @@ package com.stackunderflow.pizzasystem.ui.customer;
 import com.stackunderflow.pizzasystem.data.MenuDataManager;
 import com.stackunderflow.pizzasystem.model.Cart;
 import com.stackunderflow.pizzasystem.model.MenuItem;
+import com.stackunderflow.pizzasystem.ui.customer.CustomPizzaController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -80,25 +81,53 @@ public class MenuController {
         
         return row;
     }
+    private void openCustomizationScreen(MenuItem baseItem) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("custom-pizza-view.fxml"));
+            Scene scene = new Scene(fxmlLoader.load());
 
+            // Pass the selected pizza to the new controller
+            CustomPizzaController controller = fxmlLoader.getController();
+            controller.setBasePizza(baseItem);
+
+            Stage stage = new Stage();
+            stage.setTitle("Customize: " + baseItem.getName());
+            stage.setScene(scene);
+            stage.show();
+            
+        } catch (IOException e) {
+            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Could not open customization screen.");
+            alert.show();
+        }
+    }
     private void handleAddItem(MenuItem item, int quantity) {
-        // Check Pizza Constraint (Max 5)
+        // 1. Check Pizza Constraint (Max 5)
         long currentPizzaCount = currentCart.getItems().stream()
                 .filter(i -> "Pizza".equalsIgnoreCase(i.getCategory())).count();
-        
+
         if ("Pizza".equalsIgnoreCase(item.getCategory()) && (currentPizzaCount + quantity > MAX_PIZZAS)) {
             Alert alert = new Alert(Alert.AlertType.WARNING, "You can only order up to 5 pizzas total.");
             alert.show();
-            return;
+            return; // Stop everything if limit reached
         }
 
-        // Add to Cart Logic (Task 6)
-        for(int i = 0; i < quantity; i++) {
-            currentCart.addItem(item);
+        // 2. TRAFFIC CONTROL: Is it a Pizza?
+        if ("Pizza".equalsIgnoreCase(item.getCategory())) {
+            // --- CASE A: PIZZA (Open Customization) ---
+            openCustomizationScreen(item);
+        } else {
+            // --- CASE B: DRINK/SIDE (Add Directly) ---
+            for(int i = 0; i < quantity; i++) {
+                currentCart.addItem(item);
+            }
+            updateLabels();
+            Alert confirm = new Alert(Alert.AlertType.INFORMATION);
+            confirm.setTitle("Cart Update");
+            confirm.setHeaderText(null); // Removes the header for a cleaner look
+            confirm.setContentText(quantity + " x " + item.getName() + " added to your cart!");
+            confirm.show();}
         }
-        
-        updateLabels();
-    }
 
     private void updateLabels() {
         double total = currentCart.calculateSubtotal();

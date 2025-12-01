@@ -17,5 +17,6 @@ public class MenuItem {
     public String getName() { return name; }
     public double getBasePrice() { return basePrice; }
     public String getCategory() { return category; }
+    public int getItemId() { return itemId; }
     // ... add other necessary getters/setters ...
 }

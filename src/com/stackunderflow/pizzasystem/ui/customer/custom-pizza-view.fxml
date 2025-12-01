@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.stackunderflow.pizzasystem.ui.customer.CustomPizzaController">
+   <top>
+      <HBox alignment="CENTER" style="-fx-background-color: #ff6347; -fx-padding: 20;">
+         <Label style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: white;" text="Build Your Own Pizza" />
+      </HBox>
+   </top>
+   
+   <center>
+      <ScrollPane fitToWidth="true">
+         <content>
+            <VBox spacing="20.0" style="-fx-padding: 30;">
+               
+               <HBox spacing="20.0">
+                   <VBox spacing="5.0">
+                       <Label style="-fx-font-weight: bold;" text="Size:" />
+                       <ComboBox fx:id="sizeCombo" prefWidth="150.0" />
+                   </VBox>
+                   <VBox spacing="5.0">
+                       <Label style="-fx-font-weight: bold;" text="Crust:" />
+                       <ComboBox fx:id="crustCombo" prefWidth="150.0" />
+                   </VBox>
+                   <VBox spacing="5.0">
+                       <Label style="-fx-font-weight: bold;" text="Sauce:" />
+                       <ComboBox fx:id="sauceCombo" prefWidth="150.0" />
+                   </VBox>
+               </HBox>
+
+               <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Choose Toppings:" />
+               
+               <VBox fx:id="toppingsContainer" spacing="10.0" style="-fx-padding: 10; -fx-border-color: lightgray;" />
+               
+            </VBox>
+         </content>
+      </ScrollPane>
+   </center>
+   
+   <bottom>
+      <HBox alignment="CENTER_RIGHT" spacing="20.0" style="-fx-padding: 20; -fx-border-color: lightgray; -fx-border-width: 1 0 0 0;">
+         <Label fx:id="priceLabel" style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Price: $0.00" />
+         <Button onAction="#handleAddToCart" style="-fx-background-color: green; -fx-text-fill: white; -fx-font-weight: bold;" text="Add to Order" />
+         <Button onAction="#handleCancel" text="Cancel" />
+      </HBox>
+   </bottom>
+</BorderPane>

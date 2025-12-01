@@ -8,6 +8,15 @@ import java.util.List;
  */
 public class Cart {
 
+    private static Cart instance = null;
+
+    public static Cart getInstance() {
+        if (instance == null) {
+            instance = new Cart();
+        }
+        return instance;
+    }
+
     private List<MenuItem> items; 
     // Assumed tax rate (6% based on your receipt mockup).
     private static final double TAX_RATE = 0.06; 
