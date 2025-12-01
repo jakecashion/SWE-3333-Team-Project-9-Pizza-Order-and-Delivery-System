@@ -13,10 +13,14 @@ public class MenuItem {
         this.category = category;
     }
     
-    // Getters for display (P1.6, P1.7)
+    // --- Getters ---
+    public int getItemId() { return itemId; } // (New!)
     public String getName() { return name; }
     public double getBasePrice() { return basePrice; }
     public String getCategory() { return category; }
-    public int getItemId() { return itemId; }
-    // ... add other necessary getters/setters ...
+
+    // --- Setters ---
+    public void setBasePrice(double basePrice) { // (New!)
+        this.basePrice = basePrice; 
+    }
 }

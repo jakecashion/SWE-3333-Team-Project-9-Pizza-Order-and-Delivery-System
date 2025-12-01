@@ -8,12 +8,14 @@ import java.sql.SQLException;
 public class DatabaseSeeder {
 
     public static void main(String[] args) {
-        clearTables(); // <--- NEW STEP: Wipe the slate clean first
+        clearTables(); // <--- NEW: Deletes all old data
         seedMenuItems();
         seedInventory();
     }
 
+    // New method to clear data from tables before inserting.
     private static void clearTables() {
+        // SQL commands to delete all rows from the tables we are seeding
         String[] deleteSQLs = {
             "DELETE FROM MenuItems",
             "DELETE FROM Inventory"
@@ -27,7 +29,8 @@ public class DatabaseSeeder {
             }
             System.out.println("🗑️ Tables cleared successfully!");
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Error clearing tables: " + e.getMessage());
+            // If this fails, the menu will be duplicated, but the app won't crash.
         }
     }
 

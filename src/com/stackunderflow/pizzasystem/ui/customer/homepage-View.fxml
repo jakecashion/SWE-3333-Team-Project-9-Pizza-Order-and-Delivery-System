@@ -13,11 +13,11 @@
             <Image url="@pageImages/homepage.png" />
          </image>
       </ImageView>
-      <Button fx:id="visitMenuPage" onAction="#visitMenuPage" layoutX="132.0" layoutY="157.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="127.0" style="-fx-background-color: transparent;">
+      <Button fx:id="visitMenuPage" onAction="#visitOrderPage" layoutX="132.0" layoutY="157.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="127.0" style="-fx-background-color: transparent;">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor></Button>
-      <Button fx:id="vistitOrderPage" onAction="#visitOrderPage" layoutX="367.0" layoutY="156.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="121.0" style="-fx-background-color: transparent;">
+      <Button fx:id="vistitOrderPage" onAction="#visitMenuPage" layoutX="367.0" layoutY="156.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="121.0" style="-fx-background-color: transparent;">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor></Button>
