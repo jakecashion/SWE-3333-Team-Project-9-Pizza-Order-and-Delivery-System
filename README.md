@@ -1,6 +1,6 @@
 # MOM & POP’S Pizzaria’s Pizza System
 
-This is the SWE 3313 team project to design a pizza order and delivery system for a new "Mom and Pop" style pizza shop. The system will manage new customers, take orders, process payments, and contain the restaurant menu.
+This is the SWE 3313 team project to design a pizza order and delivery system for a new "Mom and Pop" style pizza shop. The system manages customers, takes orders, processes payments, and tracks inventory.
 
 ## Team: Stack UnderFlow
 
@@ -13,14 +13,33 @@ This is the SWE 3313 team project to design a pizza order and delivery system fo
 
 * `/assets`: Contains GUI images (icons, menu item photos, etc.)
 * `/db`: Contains the Microsoft Access database file (`MomAndPops.accdb`).
-* `/deliverables`: Contains the zipped sprint submissions and demo videos.
 * `/docs`: Contains all project planning, requirements, and design documents.
-* `/src`: Contains all Java/C# source code.
-    * `/data`: Database connection and query logic.
-    * `/model`: Data classes (Customer, Order, Pizza, etc.).
-    * `/ui`: All GUI screens (Login, Menu, Cart, etc.).
+* `/src`: Contains all Java source code.
+    * `/com/stackunderflow/pizzasystem/data`: Database connection, Seeding, and Data Managers.
+    * `/com/stackunderflow/pizzasystem/model`: Data classes (Customer, Order, Pizza, etc.).
+    * `/com/stackunderflow/pizzasystem/ui`: All GUI screens and Controllers.
+    * `/com/stackunderflow/pizzasystem/util`: Helper classes (Password Hashing, Seeder).
 
 ## How to Run
 
-1.  ...
-2.  ...
+1.  **Database Setup:**
+    * Ensure `MomAndPops.accdb` is located in the `/db` folder at the project root.
+    * Run the `src/com/stackunderflow/pizzasystem/util/DatabaseSeeder.java` file **once** to populate the database with the menu, inventory, and test users.
+
+2.  **Launch the Application:**
+    * Navigate to `src/com/stackunderflow/pizzasystem/ui/customer/AppLauncher.java`.
+    * Run the `main` method to start the application.
+
+## Test Credentials
+
+Use these accounts to test the system features without signing up manually.
+
+### **Customer Login**
+* **Username:** `customer`
+* **Password:** `password123`
+* **Phone:** `5551234567` (Used for alternative login)
+
+### **Manager/Employee Login**
+* **Username:** `manager`
+* **Password:** `admin123`
+* **Role:** Manager
