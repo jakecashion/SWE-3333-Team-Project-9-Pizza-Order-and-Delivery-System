@@ -2,6 +2,8 @@
 
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
@@ -50,5 +52,12 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </Button>
+      <VBox alignment="CENTER" layoutY="390.0" prefWidth="860.0" spacing="3.0" style="-fx-background-color: rgba(255, 255, 255, 0.85); -fx-padding: 10; -fx-background-radius: 10 10 0 0;">
+         <children>
+            <Label style="-fx-font-weight: bold; -fx-font-size: 16px; -fx-text-fill: #d32f2f;" text="Mom &amp; Pop's Pizzeria" />
+            <Label style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #333;" text="680 Arntson Rd, Suite 161, Marietta, GA 30060  •  770-555-1212" />
+            <Label style="-fx-font-size: 12px; -fx-text-fill: #555;" text="Hours: Mon-Thur 9am-11pm  |  Fri-Sat 11am-12am" />
+         </children>
+      </VBox>
    </children>
 </Pane>

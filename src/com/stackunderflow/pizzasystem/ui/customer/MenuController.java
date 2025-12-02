@@ -177,10 +177,12 @@ public class MenuController {
             Scene scene = new Scene(fxmlLoader.load());
             CustomPizzaController controller = fxmlLoader.getController();
             controller.setBasePizza(baseItem);
+            
             Stage stage = new Stage();
             stage.setTitle("Customize: " + baseItem.getName());
             stage.setScene(scene);
-            stage.show();
+            stage.showAndWait();
+            updateLabels(); // Update cart labels after customization
         } catch (IOException e) {
             e.printStackTrace();
         }

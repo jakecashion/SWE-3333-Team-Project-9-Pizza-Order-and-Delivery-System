@@ -1,6 +1,7 @@
 package com.stackunderflow.pizzasystem.util;
 
 import com.stackunderflow.pizzasystem.data.DatabaseConnector;
+import com.stackunderflow.pizzasystem.util.PasswordHasher;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -11,6 +12,7 @@ public class DatabaseSeeder {
         clearTables(); // <--- NEW: Deletes all old data
         seedMenuItems();
         seedInventory();
+        seedUsers();
     }
 
     // New method to clear data from tables before inserting.
@@ -100,6 +102,41 @@ public class DatabaseSeeder {
                 pstmt.executeUpdate();
             }
             System.out.println("✅ Inventory populated!");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void seedUsers() {
+        // SQL to insert a Customer and an Employee (Manager)
+        String sqlCustomer = "INSERT INTO Customers (Username, Password_Hash, First_Name, Last_Name, Phone_Number, Address) VALUES (?, ?, ?, ?, ?, ?)";
+        String sqlEmployee = "INSERT INTO Employees (Username, Password_Hash, First_Name, Last_Name, Role) VALUES (?, ?, ?, ?, ?)";
+
+        try (Connection conn = DatabaseConnector.getConnection()) {
+            
+            // 1. Create Test Customer (user: customer | pass: password123)
+            try (PreparedStatement pstmt = conn.prepareStatement(sqlCustomer)) {
+                pstmt.setString(1, "customer");
+                pstmt.setString(2, PasswordHasher.hash("password123")); // Hash the password
+                pstmt.setString(3, "John");
+                pstmt.setString(4, "Doe");
+                pstmt.setString(5, "5551234567");
+                pstmt.setString(6, "123 Pizza Lane");
+                pstmt.executeUpdate();
+            }
+
+            // 2. Create Test Manager (user: manager | pass: admin123)
+            try (PreparedStatement pstmt = conn.prepareStatement(sqlEmployee)) {
+                pstmt.setString(1, "manager");
+                pstmt.setString(2, PasswordHasher.hash("admin123")); // Hash the password
+                pstmt.setString(3, "Jane");
+                pstmt.setString(4, "Boss");
+                pstmt.setString(5, "Manager"); // Role
+                pstmt.executeUpdate();
+            }
+
+            System.out.println("✅ Test Users (Customer & Manager) populated!");
 
         } catch (SQLException e) {
             e.printStackTrace();

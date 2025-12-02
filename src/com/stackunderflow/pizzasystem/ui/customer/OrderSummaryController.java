@@ -1,5 +1,8 @@
 package com.stackunderflow.pizzasystem.ui.customer;
 
+import com.stackunderflow.pizzasystem.data.OrderDataManager;
+import com.stackunderflow.pizzasystem.model.Pizza;
+import java.util.List;
 import com.stackunderflow.pizzasystem.model.Cart;
 import com.stackunderflow.pizzasystem.model.Ingredient;
 import com.stackunderflow.pizzasystem.model.MenuItem;
@@ -28,6 +31,8 @@ public class OrderSummaryController {
         loadCartItems();
         calculateTotals();
     }
+
+    
 
     private void loadCartItems() {
         Cart cart = Cart.getInstance();
@@ -93,17 +98,53 @@ public class OrderSummaryController {
 
     @FXML
     private void handlePlaceOrder() {
-        // TODO: Task P1.8 - Save to Database
-        
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Order Placed");
-        alert.setHeaderText("Thank you for your order!");
-        alert.setContentText("Your food is being prepared.");
-        alert.showAndWait();
+        Cart cart = Cart.getInstance();
+        if (cart.getItems().isEmpty()) return;
 
-        // Clear Cart and Go Home
-        Cart.getInstance().getItems().clear();
-        handleBack();
+        OrderDataManager orderManager = new OrderDataManager();
+        
+        // 1. Calculate final total
+        double total = cart.calculateGrandTotal();
+        
+        // TODO: Replace '1' with the actual logged-in Customer ID from a UserSession class
+        int customerId = 1; 
+
+        // 2. Save the main Order
+        int orderId = orderManager.createOrder(customerId, total);
+        
+        if (orderId != -1) {
+            // 3. Save each item in the cart
+            for (MenuItem item : cart.getItems()) {
+                int orderItemId = orderManager.createOrderItem(orderId, item);
+                
+                // 4. If it's a Pizza, save the customizations (toppings)
+                if (item instanceof Pizza && orderItemId != -1) {
+                    Pizza pizza = (Pizza) item;
+                    for (Ingredient topping : pizza.getToppings()) {
+                        orderManager.createOrderCustomization(orderItemId, topping);
+                    }
+                }
+            }
+
+            // Success UI
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Order Placed");
+            alert.setHeaderText("Thank you for your order!");
+            alert.setContentText("Your order #" + orderId + " has been sent to the kitchen.");
+            alert.showAndWait();
+
+            // Clear Cart and Go Home
+            cart.getItems().clear();
+            handleBack();
+            
+        } else {
+            // Failure UI
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Order Failed");
+            alert.setContentText("There was a problem saving your order to the database.");
+            alert.showAndWait();
+        }
     }
 
     @FXML

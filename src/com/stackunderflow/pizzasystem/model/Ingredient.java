@@ -20,5 +20,6 @@ public class Ingredient {
     public String getName() { return name; }
     public double getExtraCost() { return extraCost; }
     public String getUnitType() { return unitType; }
+    public int getIngredientId() { return ingredientId; }
     // ... add other necessary getters/setters ...
 }
