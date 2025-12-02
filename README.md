@@ -30,6 +30,10 @@ This is the SWE 3313 team project to design a pizza order and delivery system fo
     * Navigate to `src/com/stackunderflow/pizzasystem/ui/customer/AppLauncher.java`.
     * Run the `main` method to start the application.
 
+> **Note on the Executable JAR:**
+> If the JAR file does not open on double-click, please run it via terminal:
+> `java --module-path /path/to/javafx-sdk/lib --add-modules javafx.controls,javafx.fxml -jar MomAndPopsPizza.jar`
+
 ## Test Credentials
 
 Use these accounts to test the system features without signing up manually.
