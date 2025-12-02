@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="467.0" prefWidth="860.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.stackunderflow.pizzasystem.ui.customer.HomepageController">
+   <children>
+      <ImageView fitHeight="480.0" fitWidth="858.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@/com/stackunderflow/pizzasystem/ui/images/homepage.png" />
+         </image>
+      </ImageView>
+      <Button fx:id="visitMenuPage" onAction="#visitOrderPage" layoutX="132.0" layoutY="157.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="127.0" style="-fx-background-color: transparent;">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor></Button>
+      <Button fx:id="vistitOrderPage" onAction="#visitMenuPage" layoutX="367.0" layoutY="156.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="121.0" style="-fx-background-color: transparent;">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor></Button>
+      <Button fx:id="visitCustomPizza" layoutX="573.0" layoutY="157.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="127.0" style="-fx-background-color: transparent;">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor></Button>
+      <Button fx:id="vistDrinkPage" layoutX="132.0" layoutY="248.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="127.0" style="-fx-background-color: transparent;">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor></Button>
+      <Button fx:id="visitSidePage" layoutX="370.0" layoutY="248.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="121.0" style="-fx-background-color: transparent;">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor></Button>
+      <Button fx:id="visitSpecialsPage" layoutX="573.0" layoutY="248.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="127.0" style="-fx-background-color: transparent;">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor></Button>
+      <Button fx:id="visitAccount" layoutX="724.0" layoutY="21.0" mnemonicParsing="false" onAction="#visitLoginPage" prefHeight="44.0" prefWidth="52.0" style="-fx-background-color: transparent;">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor></Button>
+      <Button fx:id="visitCartpage" layoutX="787.0" layoutY="25.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="52.0" style="-fx-background-color: transparent;">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor></Button>
+      <Button layoutX="14.0" layoutY="20.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="42.0" style="-fx-background-color: transparent;">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <VBox alignment="CENTER" layoutY="390.0" prefWidth="860.0" spacing="3.0" style="-fx-background-color: rgba(255, 255, 255, 0.85); -fx-padding: 10; -fx-background-radius: 10 10 0 0;">
+         <children>
+            <Label style="-fx-font-weight: bold; -fx-font-size: 16px; -fx-text-fill: #d32f2f;" text="Mom &amp; Pop's Pizzeria" />
+            <Label style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #333;" text="680 Arntson Rd, Suite 161, Marietta, GA 30060  •  770-555-1212" />
+            <Label style="-fx-font-size: 12px; -fx-text-fill: #555;" text="Hours: Mon-Thur 9am-11pm  |  Fri-Sat 11am-12am" />
+         </children>
+      </VBox>
+   </children>
+</Pane>
