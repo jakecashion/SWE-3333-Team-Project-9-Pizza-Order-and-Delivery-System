@@ -3,10 +3,10 @@
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="467.0" prefWidth="860.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.stackunderflow.pizzasystem.ui.customer.homepageController">
    <children>
@@ -15,11 +15,11 @@
             <Image url="@pageImages/homepage.png" />
          </image>
       </ImageView>
-      <Button fx:id="visitMenuPage" onAction="#visitOrderPage" layoutX="132.0" layoutY="157.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="127.0" style="-fx-background-color: transparent;">
+      <Button fx:id="visitMenuPage" layoutX="132.0" layoutY="157.0" mnemonicParsing="false" onAction="#visitOrderPage" prefHeight="44.0" prefWidth="127.0" style="-fx-background-color: transparent;">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor></Button>
-      <Button fx:id="vistitOrderPage" onAction="#visitMenuPage" layoutX="367.0" layoutY="156.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="121.0" style="-fx-background-color: transparent;">
+      <Button fx:id="vistitOrderPage" layoutX="367.0" layoutY="156.0" mnemonicParsing="false" onAction="#visitMenuPage" prefHeight="44.0" prefWidth="121.0" style="-fx-background-color: transparent;">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor></Button>
@@ -59,5 +59,6 @@
             <Label style="-fx-font-size: 12px; -fx-text-fill: #555;" text="Hours: Mon-Thur 9am-11pm  |  Fri-Sat 11am-12am" />
          </children>
       </VBox>
+      <Pane layoutX="123.0" layoutY="215.0" prefHeight="110.0" prefWidth="637.0" style="-fx-background-color: white;" />
    </children>
 </Pane>
