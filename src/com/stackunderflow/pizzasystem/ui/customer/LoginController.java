@@ -1,5 +1,6 @@
 package com.stackunderflow.pizzasystem.ui.customer;
 
+import com.stackunderflow.pizzasystem.data.CustomerDataManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -133,31 +134,49 @@ public class LoginController {
     }
     @FXML
     protected void submitLoginPress(ActionEvent event) {
+        // 1. Reset error messages
         errorMessagePhonenumber.setVisible(false);
         errorMessagePhonenumberExist.setVisible(false);
+        errorMessagePassword.setVisible(false);
         visitCreatAccountPage.setVisible(false);
-        errorTooManyAttempts.setVisible(false);
-        errorTooManyAttempts.toBack();
 
+        String inputId = enterPhonenumber.getText();
+        String inputPass = enterPassword.getText();
 
-        if(enterPhonenumber.getText().isBlank() || enterPhonenumber.getLength() != 10 || !checkPhoneNumber((enterPhonenumber.getText()))){
+        // 2. Basic Input Validation (Is it empty?)
+        if (inputId.isBlank() || inputPass.isBlank()) {
+            errorMessagePhonenumber.setText("Please enter phone/user and password.");
             errorMessagePhonenumber.setVisible(true);
-        } else if(checkPhoneNumber(enterPhonenumber.getText())){//if phone number is not in database
+            return;
+        }
+
+        // 3. Call the Database to Verify
+        CustomerDataManager dataManager = new CustomerDataManager();
+        String result = dataManager.validateLogin(inputId, inputPass);
+
+        if (result.equals("Login Success")) {
+            System.out.println("✅ Login Successful! Redirecting...");
+            // Proceed to Homepage
+            visitHomepage(event);
+        } else if (result.contains("User not found")) {
+            // User doesn't exist
             errorMessagePhonenumberExist.setVisible(true);
             visitCreatAccountPage.setVisible(true);
-        }
-        if(checkPassword(enterPassword.getText())){
+        } else if (result.contains("Invalid password")) {
+            // Wrong password logic
             count--;
             errorMessagePassword.setVisible(true);
             errorMessagePasswordCount.setVisible(true);
-            errorMessagePasswordCount.setText("Remaining attempts: "+ count);
-            
+            errorMessagePasswordCount.setText("Remaining attempts: " + count);
 
-            if (count == 0){
+            if (count <= 0) {
                 errorTooManyAttempts.setVisible(true);
                 errorTooManyAttempts.toFront();
-
+                submitLogin.setDisable(true); // Stop them from clicking again
             }
+        } else {
+            // Database error
+            System.err.println(result);
         }
     }
 

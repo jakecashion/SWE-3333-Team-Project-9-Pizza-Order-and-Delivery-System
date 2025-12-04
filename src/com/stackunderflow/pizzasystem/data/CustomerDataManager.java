@@ -35,18 +35,32 @@ public class CustomerDataManager {
         } catch (SQLException e) { return "Error: Database insertion failed."; }
     }
 
-    public String validateLogin(String username, String rawPassword) {
-        String sql = "SELECT Password_Hash FROM Customers WHERE Username = ?";
+    public String validateLogin(String identifier, String rawPassword) {
+        // UPDATED SQL: Checks if the input matches EITHER Username OR Phone_Number
+        String sql = "SELECT Password_Hash FROM Customers WHERE Username = ? OR Phone_Number = ?";
+        
         try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, username);
+            
+            pstmt.setString(1, identifier);
+            pstmt.setString(2, identifier); // Set the same input for the second '?'
+            
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
                     String storedHash = rs.getString("Password_Hash");
-                    if (PasswordHasher.check(rawPassword, storedHash)) return "Login Success";
-                    else return "Error: Invalid password";
-                } else { return "Error: User not found"; }
+                    // Check if the provided password matches the stored hash
+                    if (PasswordHasher.check(rawPassword, storedHash)) {
+                        return "Login Success";
+                    } else {
+                        return "Error: Invalid password";
+                    }
+                } else {
+                    return "Error: User not found"; 
+                }
             }
-        } catch (SQLException e) { return "Error: Database problem"; }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return "Error: Database problem"; 
+        }
     }
 }
