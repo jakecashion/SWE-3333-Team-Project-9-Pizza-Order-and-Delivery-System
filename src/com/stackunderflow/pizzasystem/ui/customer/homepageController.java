@@ -1,5 +1,9 @@
 package com.stackunderflow.pizzasystem.ui.customer;
 
+
+import com.stackunderflow.pizzasystem.data.MenuDataManager;
+import com.stackunderflow.pizzasystem.model.MenuItem;
+import java.util.List;
 import javafx.fxml.FXML;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -95,5 +99,44 @@ public class homepageController {
         stage.setScene(scene);
         stage.show();
     }
+    @FXML
+    private void handleCustomPizza(ActionEvent event) {
+        // 1. Fetch menu items to find the "Custom Pizza" object
+        MenuDataManager dataManager = new MenuDataManager();
+        List<MenuItem> items = dataManager.loadAllMenuItems();
+        
+        // 2. Find the specific item (must match the name in DatabaseSeeder)
+        MenuItem customBase = null;
+        for (MenuItem item : items) {
+            if ("Custom Pizza".equalsIgnoreCase(item.getName())) {
+                customBase = item;
+                break;
+            }
+        }
 
+        // 3. Open the customization window
+        if (customBase != null) {
+            openCustomizationScreen(customBase);
+        } else {
+            System.err.println("Error: 'Custom Pizza' item not found in database. Did you run the Seeder?");
+        }
+    }
+
+    private void openCustomizationScreen(MenuItem baseItem) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("custom-pizza-view.fxml"));
+            Scene scene = new Scene(fxmlLoader.load());
+            
+            CustomPizzaController controller = fxmlLoader.getController();
+            controller.setBasePizza(baseItem);
+            
+            Stage stage = new Stage();
+            stage.setTitle("Customize: " + baseItem.getName());
+            stage.setScene(scene);
+            stage.showAndWait(); // Wait for user to finish
+            
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

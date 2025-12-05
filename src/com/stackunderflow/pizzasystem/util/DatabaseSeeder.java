@@ -29,7 +29,7 @@ public class DatabaseSeeder {
                     pstmt.executeUpdate();
                 }
             }
-            System.out.println("🗑️ Tables cleared successfully!");
+            System.out.println("Tables cleared successfully!");
         } catch (SQLException e) {
             System.err.println("Error clearing tables: " + e.getMessage());
             // If this fails, the menu will be duplicated, but the app won't crash.
@@ -41,6 +41,7 @@ public class DatabaseSeeder {
         
         Object[][] items = {
             {"Cheese Pizza", "Classic cheese", 9.99, "Pizza"},
+            {"Custom Pizza", "Build your own pizza with any toppings", 9.99, "Pizza"},
             {"Pepperoni Pizza", "Pepperoni and cheese", 11.99, "Pizza"},
             {"Meat Lovers", "Bacon, pepperoni, and sausage", 14.99, "Pizza"},
             {"Veggie Pizza", "Onions, peppers, and olives", 12.99, "Pizza"},
@@ -62,7 +63,7 @@ public class DatabaseSeeder {
                 pstmt.setString(4, (String) item[3]);
                 pstmt.executeUpdate();
             }
-            System.out.println("✅ MenuItems populated!");
+            System.out.println("MenuItems populated!");
             
         } catch (SQLException e) {
             e.printStackTrace();
@@ -101,7 +102,7 @@ public class DatabaseSeeder {
                 pstmt.setInt(4, (int) ing[3]);
                 pstmt.executeUpdate();
             }
-            System.out.println("✅ Inventory populated!");
+            System.out.println("Inventory populated!");
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -136,7 +137,7 @@ public class DatabaseSeeder {
                 pstmt.executeUpdate();
             }
 
-            System.out.println("✅ Test Users (Customer & Manager) populated!");
+            System.out.println("Test Users (Customer & Manager) populated!");
 
         } catch (SQLException e) {
             e.printStackTrace();
