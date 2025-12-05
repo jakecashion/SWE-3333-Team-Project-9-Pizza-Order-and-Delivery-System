@@ -39,7 +39,17 @@ public class homepageController {
 
 
     @FXML
-    protected void visitLoginPage(ActionEvent event){
+    protected void visitLoginPage(ActionEvent event) throws IOException {
+        if (LoginController.isLoggedIn) {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("customer-dashboard-view.fxml"));
+            Parent customerRoot = loader.load();
+
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(customerRoot));
+            stage.setTitle("Your Account");
+            stage.show();
+            return;
+        }
         try{
             FXMLLoader loader = new FXMLLoader((getClass().getResource("Login-view.fxml")));
             Parent loginroot = loader.load();
