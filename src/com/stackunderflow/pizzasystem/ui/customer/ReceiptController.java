@@ -57,12 +57,14 @@ public class ReceiptController {
     @FXML
     private void handleTrackOrder() {
         try {
+            // Use getClass().getResource() with the EXACT file name
+            // Ensure "order-status-view.fxml" is in the same folder as ReceiptController.java
             FXMLLoader loader = new FXMLLoader(getClass().getResource("order-status-view.fxml"));
             Scene scene = new Scene(loader.load());
-            
+    
             OrderStatusController controller = loader.getController();
             controller.setOrderId(currentOrderId);
-            
+    
             Stage stage = (Stage) totalLabel.getScene().getWindow();
             stage.setScene(scene);
             stage.setTitle("Order Status");

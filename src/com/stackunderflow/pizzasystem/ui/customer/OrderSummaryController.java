@@ -1,23 +1,25 @@
 package com.stackunderflow.pizzasystem.ui.customer;
 
 import com.stackunderflow.pizzasystem.data.OrderDataManager;
-import com.stackunderflow.pizzasystem.model.Pizza;
-import java.util.List;
 import com.stackunderflow.pizzasystem.model.Cart;
 import com.stackunderflow.pizzasystem.model.Ingredient;
 import com.stackunderflow.pizzasystem.model.MenuItem;
 import com.stackunderflow.pizzasystem.model.Pizza;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class OrderSummaryController {
 
@@ -26,13 +28,37 @@ public class OrderSummaryController {
     @FXML private Label taxLabel;
     @FXML private Label totalLabel;
 
+    // Payment UI Components
+    @FXML private RadioButton cashRadio;
+    @FXML private RadioButton creditRadio;
+    @FXML private ToggleGroup paymentGroup;
+    @FXML private VBox creditCardDetails;
+    @FXML private TextField cardNumberField;
+    @FXML private TextField expiryField;
+    @FXML private TextField cvvField;
+
     @FXML
     public void initialize() {
+        refreshReceipt();
+        setupPaymentLogic();
+    }
+
+    private void setupPaymentLogic() {
+        creditCardDetails.managedProperty().bind(creditCardDetails.visibleProperty());
+        paymentGroup.selectedToggleProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal == creditRadio) {
+                creditCardDetails.setVisible(true);
+            } else {
+                creditCardDetails.setVisible(false);
+            }
+        });
+    }
+
+    private void refreshReceipt() {
+        receiptContainer.getChildren().clear();
         loadCartItems();
         calculateTotals();
     }
-
-    
 
     private void loadCartItems() {
         Cart cart = Cart.getInstance();
@@ -43,28 +69,61 @@ public class OrderSummaryController {
             return;
         }
 
+        // --- GROUPING LOGIC ---
+        List<CartGroup> groups = new ArrayList<>();
+        
         for (MenuItem item : cart.getItems()) {
-            // 1. Create Main Item Row
-            HBox itemRow = new HBox();
-            Label nameLbl = new Label(item.getName());
+            boolean found = false;
+            for (CartGroup group : groups) {
+                if (areItemsEqual(group.item, item)) {
+                    group.quantity++;
+                    group.instances.add(item);
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                groups.add(new CartGroup(item));
+            }
+        }
+
+        for (CartGroup group : groups) {
+            MenuItem item = group.item;
+            
+            HBox itemRow = new HBox(10); 
+            itemRow.setAlignment(Pos.CENTER_LEFT);
+
+            // Quantity Buttons
+            Button minusBtn = new Button("-");
+            minusBtn.setStyle("-fx-min-width: 30px; -fx-background-color: #e0e0e0; -fx-cursor: hand;");
+            minusBtn.setOnAction(e -> handleRemoveItem(group.instances.get(0)));
+
+            Button plusBtn = new Button("+");
+            plusBtn.setStyle("-fx-min-width: 30px; -fx-background-color: #e0e0e0; -fx-cursor: hand;");
+            plusBtn.setOnAction(e -> handleDuplicateItem(item));
+
+            // Name Label (e.g. "Pepperoni Pizza x 2")
+            String nameText = item.getName();
+            if (group.quantity > 1) {
+                nameText += " x " + group.quantity;
+            }
+            Label nameLbl = new Label(nameText);
             nameLbl.setStyle("-fx-font-weight: bold;");
             
-            // Dynamic Price check (Pizza vs Regular)
-            double price = (item instanceof Pizza) ? ((Pizza) item).calculatePrice() : item.getBasePrice();
-            Label priceLbl = new Label("$" + String.format("%.2f", price));
+            double unitPrice = (item instanceof Pizza) ? ((Pizza) item).calculatePrice() : item.getBasePrice();
+            double groupTotal = unitPrice * group.quantity;
+            Label priceLbl = new Label("$" + String.format("%.2f", groupTotal));
             
-            // Spacer to push price to the right
             Region spacer = new Region();
             HBox.setHgrow(spacer, Priority.ALWAYS);
             
-            itemRow.getChildren().addAll(nameLbl, spacer, priceLbl);
+            itemRow.getChildren().addAll(minusBtn, plusBtn, nameLbl, spacer, priceLbl);
             receiptContainer.getChildren().add(itemRow);
 
-            // 2. If Pizza, list the customizations
             if (item instanceof Pizza) {
                 Pizza pizza = (Pizza) item;
                 VBox detailsBox = new VBox();
-                detailsBox.setStyle("-fx-padding: 0 0 0 10; -fx-text-fill: gray;");
+                detailsBox.setStyle("-fx-padding: 0 0 0 80; -fx-text-fill: gray;");
                 
                 Label sizeLbl = new Label("- Size: " + pizza.getSize());
                 Label crustLbl = new Label("- Crust: " + pizza.getCrust());
@@ -78,11 +137,76 @@ public class OrderSummaryController {
                 receiptContainer.getChildren().add(detailsBox);
             }
             
-            // Add a small separator space
             Region rowSpace = new Region();
             rowSpace.setPrefHeight(10);
             receiptContainer.getChildren().add(rowSpace);
         }
+    }
+
+    private static class CartGroup {
+        MenuItem item;
+        int quantity;
+        List<MenuItem> instances;
+
+        CartGroup(MenuItem item) {
+            this.item = item;
+            this.quantity = 1;
+            this.instances = new ArrayList<>();
+            this.instances.add(item);
+        }
+    }
+
+    private boolean areItemsEqual(MenuItem a, MenuItem b) {
+        if (a.getClass() != b.getClass()) return false;
+        if (a.getItemId() != b.getItemId()) return false;
+        if (!a.getName().equals(b.getName())) return false;
+
+        if (a instanceof Pizza) {
+            Pizza pA = (Pizza) a;
+            Pizza pB = (Pizza) b;
+            
+            if (!pA.getSize().equals(pB.getSize())) return false;
+            if (!pA.getCrust().equals(pB.getCrust())) return false;
+            if (!pA.getSauce().equals(pB.getSauce())) return false;
+
+            Set<Integer> tA = pA.getToppings().stream().map(Ingredient::getIngredientId).collect(Collectors.toSet());
+            Set<Integer> tB = pB.getToppings().stream().map(Ingredient::getIngredientId).collect(Collectors.toSet());
+            
+            return tA.equals(tB);
+        }
+        return true;
+    }
+
+    private void handleDuplicateItem(MenuItem item) {
+        if (item instanceof Pizza) {
+            Pizza original = (Pizza) item;
+            Pizza copy = new Pizza(
+                original.getItemId(), 
+                original.getName(), 
+                original.getBasePrice(), 
+                original.getSize(), 
+                original.getCrust(), 
+                original.getSauce()
+            );
+            for (Ingredient ing : original.getToppings()) {
+                copy.addTopping(ing);
+            }
+            Cart.getInstance().addItem(copy);
+        } else {
+            MenuItem copy = new MenuItem(
+                item.getItemId(), 
+                item.getName(), 
+                item.getBasePrice(), 
+                item.getCategory()
+            );
+            Cart.getInstance().addItem(copy);
+        }
+        refreshReceipt();
+    }
+
+    private void handleRemoveItem(MenuItem item) {
+        Cart.getInstance().removeItem(item);
+        refreshReceipt();
     }
 
     private void calculateTotals() {
@@ -99,25 +223,32 @@ public class OrderSummaryController {
     @FXML
     private void handlePlaceOrder() {
         Cart cart = Cart.getInstance();
-        if (cart.getItems().isEmpty()) return;
+        if (cart.getItems().isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Your cart is empty!");
+            alert.showAndWait();
+            return;
+        }
+
+        if (creditRadio.isSelected()) {
+            if (cardNumberField.getText().isEmpty() || expiryField.getText().isEmpty() || cvvField.getText().isEmpty()) {
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Please fill in all credit card details.");
+                alert.showAndWait();
+                return;
+            }
+        }
 
         OrderDataManager orderManager = new OrderDataManager();
-        
-        // 1. Calculate final total
         double total = cart.calculateGrandTotal();
-        
-        // TODO: Replace '1' with the actual logged-in Customer ID from a UserSession class
         int customerId = 1; 
 
-        // 2. Save the main Order
-        int orderId = orderManager.createOrder(customerId, total);
+        String orderType = cart.getOrderType(); 
+        
+        // This line requires the updated OrderDataManager from Step 1
+        int orderId = orderManager.createOrder(customerId, total, orderType);
         
         if (orderId != -1) {
-            // 3. Save each item in the cart
             for (MenuItem item : cart.getItems()) {
                 int orderItemId = orderManager.createOrderItem(orderId, item);
-                
-                // 4. If it's a Pizza, save the customizations (toppings)
                 if (item instanceof Pizza && orderItemId != -1) {
                     Pizza pizza = (Pizza) item;
                     for (Ingredient topping : pizza.getToppings()) {
@@ -126,19 +257,26 @@ public class OrderSummaryController {
                 }
             }
 
-            // Success UI
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Order Placed");
-            alert.setHeaderText("Thank you for your order!");
-            alert.setContentText("Your order #" + orderId + " has been sent to the kitchen.");
-            alert.showAndWait();
+            try {
+                // Navigate to Receipt View
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("receipt-view.fxml"));
+                Scene scene = new Scene(loader.load());
+                
+                ReceiptController controller = loader.getController();
+                controller.setOrderDetails(orderId, orderType, total, new java.util.ArrayList<>(cart.getItems()));
+                
+                Stage stage = (Stage) totalLabel.getScene().getWindow();
+                stage.setScene(scene);
+                stage.setTitle("Receipt");
+                
+                cart.getItems().clear();
+                cart.setOrderType(null);
 
-            // Clear Cart and Go Home
-            cart.getItems().clear();
-            handleBack();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             
         } else {
-            // Failure UI
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText("Order Failed");
