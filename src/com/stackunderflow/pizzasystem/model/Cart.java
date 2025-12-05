@@ -9,6 +9,7 @@ import java.util.List;
 public class Cart {
 
     private static Cart instance = null;
+    private String orderType = null;
 
     public static Cart getInstance() {
         if (instance == null) {
@@ -23,6 +24,14 @@ public class Cart {
 
     public Cart() {
         this.items = new ArrayList<>();
+    }
+
+    public void setOrderType(String type) {
+        this.orderType = type;
+    }
+
+    public String getOrderType() {
+        return orderType;
     }
 
     // --- Cart Management (Task 6) ---

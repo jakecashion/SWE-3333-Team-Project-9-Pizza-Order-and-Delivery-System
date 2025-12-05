@@ -1,5 +1,6 @@
 package com.stackunderflow.pizzasystem.ui.customer;
 
+import java.util.Optional;
 import com.stackunderflow.pizzasystem.data.MenuDataManager;
 import com.stackunderflow.pizzasystem.model.Cart;
 import com.stackunderflow.pizzasystem.model.Ingredient;
@@ -121,16 +122,35 @@ public class CustomPizzaController {
         priceLabel.setText("Price: $" + String.format("%.2f", currentPizza.calculatePrice()));
     }
 
-    @FXML
+@FXML
     private void handleAddToCart() {
-        // Final Price Calculation happens inside updatePrice, so we just use the model
+        // 1. CHECK: Has the user selected Pickup or Delivery yet?
+        // We check the global Cart instance to see if an Order Type is already set.
+        if (Cart.getInstance().getOrderType() == null) {
+            ChoiceDialog<String> dialog = new ChoiceDialog<>("Pickup", "Pickup", "Delivery");
+            dialog.setTitle("Start Order");
+            dialog.setHeaderText("How would you like to receive your order?");
+            dialog.setContentText("Choose option:");
+
+            Optional<String> result = dialog.showAndWait();
+
+            if (result.isPresent()) {
+                // Save the choice to the Cart so we don't ask again this session
+                Cart.getInstance().setOrderType(result.get());
+            } else {
+                // User clicked Cancel, so stop the "Add" process and stay on screen
+                return; 
+            }
+        }
+
+        // 2. Proceed to add the pizza to the cart
         Cart.getInstance().addItem(currentPizza);
         
         Alert alert = new Alert(Alert.AlertType.INFORMATION, 
                                 "Custom Pizza: " + currentPizza.getSize() + " added to order!");
         alert.showAndWait();
         
-        // Close the customization window after adding the item
+        // 3. Close the customization window
         ((Stage) priceLabel.getScene().getWindow()).close();
     }
 

@@ -1,5 +1,6 @@
 package com.stackunderflow.pizzasystem.ui.customer;
 
+import java.util.Optional;
 import com.stackunderflow.pizzasystem.data.MenuDataManager;
 import com.stackunderflow.pizzasystem.model.Cart;
 import com.stackunderflow.pizzasystem.model.MenuItem;
@@ -44,6 +45,11 @@ public class MenuController {
         List<MenuItem> items = dataManager.loadAllMenuItems();
 
         for (MenuItem item : items) {
+
+            if ("Custom Pizza".equalsIgnoreCase(item.getName())) {
+                continue; 
+            }
+
             VBox card = createItemCard(item);
             
             String category = item.getCategory();
@@ -114,11 +120,31 @@ public class MenuController {
         return card;
     }
 
-    private void handleAddItem(MenuItem item) {
+private void handleAddItem(MenuItem item) {
+        // 1. CHECK: Has the user selected Pickup or Delivery yet?
+        if (currentCart.getOrderType() == null) {
+            ChoiceDialog<String> dialog = new ChoiceDialog<>("Pickup", "Pickup", "Delivery");
+            dialog.setTitle("Start Order");
+            dialog.setHeaderText("How would you like to receive your order?");
+            dialog.setContentText("Choose option:");
+
+            Optional<String> result = dialog.showAndWait();
+
+            if (result.isPresent()) {
+                // Save the choice to the Cart so we don't ask again this session
+                currentCart.setOrderType(result.get());
+            } else {
+                // User clicked Cancel, so stop the "Add" process
+                return; 
+            }
+        }
+
+        // 2. Proceed with normal logic (Pizza vs Regular Item)
         if ("Pizza".equalsIgnoreCase(item.getCategory())) {
             openCustomizationScreen(item);
             return; 
         }
+        
         currentCart.addItem(item);
         updateLabels();
         
