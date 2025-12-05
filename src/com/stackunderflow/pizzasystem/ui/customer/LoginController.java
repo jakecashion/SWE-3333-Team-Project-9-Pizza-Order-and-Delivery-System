@@ -17,6 +17,7 @@ import java.io.IOException;
 
 
 public class LoginController {
+    public static boolean isLoggedIn = false;
     int count = 4;
     //login stuff
     @FXML
@@ -49,6 +50,7 @@ public class LoginController {
 
     @FXML
     protected void onvisitSignupPage(ActionEvent event){
+
         try{
             FXMLLoader loader = new FXMLLoader((getClass().getResource("signUP-view.fxml")));
             Parent signUproot = loader.load();
@@ -155,8 +157,9 @@ public class LoginController {
         String result = dataManager.validateLogin(inputId, inputPass);
 
         if (result.equals("Login Success")) {
-            System.out.println("✅ Login Successful! Redirecting...");
+            System.out.println(" Login Successful! Redirecting...");
             // Proceed to Homepage
+            isLoggedIn = true;
             visitHomepage(event);
         } else if (result.contains("User not found")) {
             // User doesn't exist
