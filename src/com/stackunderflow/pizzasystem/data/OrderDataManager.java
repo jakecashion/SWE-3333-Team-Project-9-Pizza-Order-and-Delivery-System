@@ -10,21 +10,36 @@ public class OrderDataManager {
     /**
      * Inserts the main order record and returns the generated Order_ID.
      */
+<<<<<<< Updated upstream
     public int createOrder(int customerId, double totalPrice) {
         // MS Access uses Now() for current timestamp. 
         // 'Pickup' is hardcoded as default, or you can pass it as a parameter.
         String sql = "INSERT INTO Orders (Customer_ID, Order_Date, Order_Type, Total_Price, Status) VALUES (?, Now(), 'Pickup', ?, 'Pending')";
+=======
+    public int createOrder(int customerId, double totalPrice, String orderType) {
+        
+        // CHANGED: Use '?' for Order_Type instead of hardcoded 'Pickup'
+        String sql = "INSERT INTO Orders (Customer_ID, Order_Date, Order_Type, Total_Price, Status) VALUES (?, Now(), ?, ?, 'Pending')";
+>>>>>>> Stashed changes
         
         try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             
             pstmt.setInt(1, customerId);
+<<<<<<< Updated upstream
             pstmt.setDouble(2, totalPrice);
+=======
+            pstmt.setString(2, orderType != null ? orderType : "Pickup"); // Default to Pickup if null
+            pstmt.setDouble(3, totalPrice);
+>>>>>>> Stashed changes
             
             int affectedRows = pstmt.executeUpdate();
             if (affectedRows == 0) return -1;
 
+<<<<<<< Updated upstream
             // Retrieve the auto-generated Order_ID
+=======
+>>>>>>> Stashed changes
             try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     return generatedKeys.getInt(1);
@@ -33,7 +48,11 @@ public class OrderDataManager {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+<<<<<<< Updated upstream
         return -1; // Return -1 on failure
+=======
+        return -1;
+>>>>>>> Stashed changes
     }
 
     /**
